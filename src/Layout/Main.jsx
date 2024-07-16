@@ -12,7 +12,7 @@ const Main = () => {
   };
 
   return (
-    <div>
+    <div className='bg-gray-100'>
       <Navbar language={language} onLanguageToggle={handleLanguageToggle} />
       <Outlet context={{ language }} />
       <Footer />

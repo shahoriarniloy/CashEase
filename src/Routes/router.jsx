@@ -5,6 +5,8 @@ import RouteNotFound from "./RouteNotFound";
 import Main from "../Layout/Main";
 import Login from '../Components/Login'
 import Register from '../Components/Register'
+import UserHome from '../Components/UserHome'
+import Dashboard from "../Components/Dashboard";
 
 
   export const router = createBrowserRouter([
@@ -15,12 +17,16 @@ import Register from '../Components/Register'
       children: [
         {
             path: "/",
-            element: <Login></Login>,
+            element: <Dashboard></Dashboard>,
         },
         {
             path: "/register",
             element: <Register></Register>,
         },
+        {
+          path: "/login",
+          element: <Login></Login>,
+      },
         
       ]
     },

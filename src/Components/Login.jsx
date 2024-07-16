@@ -1,6 +1,7 @@
-import  { useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const Login = () => {
   const { language } = useOutletContext();
@@ -10,6 +11,8 @@ const Login = () => {
   const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState('');
   const [pinError, setPinError] = useState('');
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     let value = e.target.value;
@@ -67,6 +70,20 @@ const Login = () => {
 
         if (response.ok) {
           console.log('Login successful:', data);
+
+          axios.post('http://localhost:5000/jwt',{
+            input: input,
+            pin: pin,
+          },{withCredentials:true})
+          .then(res=>{
+            console.log(res.data);
+            if(res.data.success){
+              {{console.log('input:::',input);}}
+              localStorage.setItem('userInput', input);
+              navigate(location?.state?location?.state:'/')
+            }
+          })
+
         } else {
           console.log('Login failed:', data);
           setError(language === 'EN' ? 'Invalid credentials' : 'ভুল শংসাপত্র');
@@ -76,6 +93,10 @@ const Login = () => {
         setError(language === 'EN' ? 'Login failed' : 'লগইন ব্যর্থ হয়েছে');
       }
     }
+  };
+
+  const handleRegister = () => {
+    navigate('/register');
   };
 
   return (
@@ -100,7 +121,7 @@ const Login = () => {
             </div>
           </div>
           <div
-            className="text-blue-600 cursor-pointer mb-2"
+            className="text-blue-500 cursor-pointer mb-2"
             onClick={handleOptionClick}
           >
             {language === 'EN' ? `Use ${isUsingEmail ? 'Mobile Number' : 'Email'} instead` : `বিকল্প হিসাবে ${isUsingEmail ? 'মোবাইল নাম্বার' : 'ইমেইল'} ব্যবহার করুন `}
@@ -127,6 +148,15 @@ const Login = () => {
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button type="submit" className="w-full p-2 bg-blue-600 text-white rounded-md">{language === 'EN' ? 'Login' : 'লগইন'}</button>
         </form>
+        <div className="flex justify-center items-center mt-4">
+          <p>{language === 'EN' ? "Don't have an account?" : 'অ্যাকাউন্ট নেই?'}</p>
+          <button
+            onClick={handleRegister}
+            className="p-2  text-blue-500 font-bold rounded-md"
+          >
+            {language === 'EN' ? 'Register' : 'রেজিস্টার'}
+          </button>
+        </div>
       </div>
     </div>
   );
